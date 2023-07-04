@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 # Create your models here.
 class Author(models.Model):
@@ -21,3 +22,19 @@ class Book(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
+class Borrower(models.Model):
+    name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.name}"
+
+class BorrowingTransaction(models.Model):
+    transaction_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    book = models.ManyToManyField(Book)
+    borrower = models.ForeignKey(Borrower, on_delete=models.CASCADE)
+    due_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.borrower.name}-{self.transaction_id}"

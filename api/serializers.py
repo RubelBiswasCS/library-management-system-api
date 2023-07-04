@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from library.models import Author, Book
+from library.models import Author, Book, Borrower, BorrowingTransaction
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +15,14 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     def get_books(self,obj):
         return BookSerializer(obj.get_books,many=True).data
+    
+class BorrowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Borrower
+        fields = [ 'id', 'name','phone' ]
+
+class BorrowingTransactionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BorrowingTransaction
+        fields = [ 'id','transaction_id', 'book', 'borrower', 'due_date' ]
